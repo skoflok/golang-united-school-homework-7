@@ -128,3 +128,73 @@ func Test_DiffrentRowsLengthNew(t *testing.T) {
 		t.Errorf("Matrix's error is nil. Error should be row's length error")
 	}
 }
+
+func Test_SimpleRows(t *testing.T) {
+	simpleInput := "11 12 13\n21 22 23\n31 32 33"
+	output := [][]int{
+		{11, 12, 13}, {21, 22, 23}, {31, 32, 33},
+	}
+	matrix, err := New(simpleInput)
+	if err != nil {
+		t.Errorf("Input string error")
+	}
+
+	rows := matrix.Rows()
+	if compareSliceOfSlice(rows, output) == false {
+		t.Errorf("Bad represented matrix as rows")
+	}
+}
+
+func Test_SimpleCols(t *testing.T) {
+	simpleInput := "11 12 13\n21 22 23\n31 32 33"
+	output := [][]int{
+		{11, 21, 31}, {12, 22, 32}, {13, 23, 33},
+	}
+	matrix, err := New(simpleInput)
+	if err != nil {
+		t.Errorf("Input string error")
+	}
+
+	rows := matrix.Cols()
+	if compareSliceOfSlice(rows, output) == false {
+		t.Errorf("Bad represented matrix as cols")
+	}
+}
+
+func Test_TrueSet(t *testing.T) {
+	simpleInput := "11 12 13\n21 22 23\n31 32 33"
+	matrix, _ := New(simpleInput)
+	ok := matrix.Set(1, 1, 0)
+	if ok == false {
+		t.Errorf("Value not set correctly to matrix")
+	}
+}
+
+func Test_FalseSet(t *testing.T) {
+	simpleInput := "11 12 13\n21 22 23\n31 32 33"
+	matrix, _ := New(simpleInput)
+	ok := matrix.Set(5, 1, 0)
+	if ok == true {
+		t.Errorf("Value setted out of range")
+	}
+}
+
+func compareSliceOfSlice(a [][]int, b [][]int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i, r := range a {
+
+		if len(a[i]) != len(b[i]) {
+			return false
+		}
+
+		for j, _ := range r {
+			if a[i][j] != b[i][j] {
+				return false
+			}
+		}
+	}
+	return true
+}
